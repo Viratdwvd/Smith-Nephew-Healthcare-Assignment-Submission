@@ -1,221 +1,496 @@
-# SIOP Reporting Dashboard — Case Study 2
+# SIOP Reporting Dashboard
 
-> **Sales, Inventory & Operations Planning** | Power BI + Python EDA  
-> Virat Dwivedi · Reg No. 22MIA1101 · B.Tech CSE (Business Analytics) · VIT Chennai
+> Sales, Inventory & Operations Planning (SIOP) Reporting Solution developed using Power BI, Power Query, DAX, and Python.
 
----
-
-##  Project Overview
-
-This project delivers a complete SIOP (Sales, Inventory & Operations Planning) reporting solution built for Case Study 2 of the internship assessment. It covers the full pipeline — from raw data transformation and KPI engineering to an interactive Power BI dashboard and a comprehensive exploratory data analysis notebook.
-
-**Core objective:** Transform multi-snapshot forecast data, compute forecast accuracy/bias KPIs, and build an executive-grade Power BI dashboard that enables supply chain planners to monitor forecast performance across countries, periods, and planning lags.
+**Author:** Virat Dwivedi  
+**Program:** B.Tech CSE (Business Analytics), VIT Chennai  
+**Case Study:** Internship Program – Case Study 2 (SIOP Reporting)
 
 ---
 
-##  Repository Structure
+# Project Overview
 
+This project delivers a complete SIOP (Sales, Inventory & Operations Planning) reporting solution built using Power BI.
+
+The objective was to transform forecast and actual sales data into an executive reporting dashboard that helps business users analyze:
+
+- Revenue Forecast
+- Non-Revenue Forecast
+- CAPEX Forecast
+- Forecast Accuracy
+- Forecast Bias
+- Forecast Revisions
+- Forecast Volatility
+- Forecast vs Actual Performance
+- Country-Level Forecast Performance
+- Item-Level Forecast Performance
+
+---
+
+# Business Requirements Implemented
+
+## Forecast Accuracy %
+
+Business Formula:
+
+```text
+Forecast Accuracy %
+=
+1 - ABS(Forecast Qty - Actual Qty)
+    / Actual Qty
 ```
-SIOP-Reporting/
+
+Implemented for:
+
+- Lag 0 Forecast
+- Lag 1 Forecast
+
+---
+
+## Forecast Bias %
+
+Business Formula:
+
+```text
+Forecast Bias %
+=
+(Forecast Qty - Actual Qty)
+ / Actual Qty
+```
+
+Implemented for:
+
+- Lag 0 Forecast
+- Lag 1 Forecast
+
+---
+
+## Dynamic Lag Selection
+
+Dashboard supports:
+
+- Resultant Forecast
+- Lag 0 Forecast
+- Lag 1 Forecast
+
+Using a disconnected slicer table and SWITCH() DAX measures.
+
+---
+
+# Technology Stack
+
+| Layer | Technology |
+|---------|---------|
+| Dashboarding | Power BI Desktop |
+| Data Transformation | Power Query |
+| KPI Development | DAX |
+| EDA | Python |
+| Data Source | Excel (.xlsb) |
+| Documentation | PDF |
+
+---
+
+# Data Model
+
+The solution follows a Star Schema design.
+
+```text
+DimCountry
+     |
+     |
+ForecastWide
+     |
+     |
+DimPeriod
+
+Actual
+```
+
+Additional disconnected table:
+
+```text
+SlicerLag
+```
+
+Used to dynamically switch between:
+
+- Resultant
+- Lag 0
+- Lag 1
+
+---
+
+# DAX Measures Implemented
+
+## Forecast Measures
+
+### Revenue
+
+```dax
+Resultant Revenue Forecast
+Lag0 Revenue Forecast
+Lag1 Revenue Forecast
+```
+
+### Non-Revenue
+
+```dax
+Resultant NonRevenue Forecast
+Lag0 NonRevenue Forecast
+Lag1 NonRevenue Forecast
+```
+
+### CAPEX
+
+```dax
+Resultant CAPEX Forecast
+Lag0 CAPEX Forecast
+Lag1 CAPEX Forecast
+```
+
+---
+
+## Actual Measures
+
+```dax
+Actual Revenue Qty
+Actual NonRevenue Qty
+Actual CAPEX Qty
+```
+
+---
+
+## KPI Measures
+
+```dax
+Forecast Accuracy % (Lag0 Revenue)
+Forecast Accuracy % (Lag1 Revenue)
+
+Forecast Bias % (Lag0 Revenue)
+Forecast Bias % (Lag1 Revenue)
+```
+
+---
+
+## Dynamic Lag Measures
+
+```dax
+Selected Revenue Forecast
+Selected NonRevenue Forecast
+Selected CAPEX Forecast
+```
+
+---
+
+## Variance Measures
+
+```dax
+Revenue Variance
+
+Revenue Variance %
+
+Forecast Attainment
+
+Revenue Gap
+
+Forecast Revision
+
+Forecast Volatility
+```
+
+---
+
+# Dashboard Pages
+
+---
+
+# 1. Executive Overview
+
+### Purpose
+
+Provide a high-level executive summary of forecast performance.
+
+### Key Visuals
+
+- Revenue Forecast KPI
+- Non-Revenue Forecast KPI
+- CAPEX Forecast KPI
+- Forecast Trend
+- Lag Comparison
+- Forecast Revision Analysis
+- Dynamic Lag Selection
+
+### Business Questions Answered
+
+- What is the latest forecast?
+- How has the forecast changed over time?
+- Which periods show the highest forecast revisions?
+- How do Lag 0, Lag 1, and Resultant forecasts compare?
+
+---
+
+## Screenshot
+
+![Executive Overview](ScreenShots/Executive%20Overview1.png)
+
+---
+
+# 2. Forecast vs Actual Analysis
+
+### Purpose
+
+Compare forecast performance against actual business results.
+
+### Key Visuals
+
+- Country Performance Matrix
+- Forecast Accuracy KPI
+- Forecast Bias KPI
+- Revenue Gap KPI
+- Revenue Variance KPI
+- Forecast vs Actual Trend
+- Revenue Gap Waterfall
+
+### Business Questions Answered
+
+- How accurate are forecasts?
+- Are forecasts biased?
+- Which countries contribute most forecast error?
+- What is the revenue gap?
+
+---
+
+## Screenshot
+
+![Forecast vs Actual](ScreenShots/Forecast%20vs%20Actual2.png)
+
+---
+
+# 3. Segmentation Analysis
+
+### Purpose
+
+Analyze revenue distribution across countries and segmentation regions.
+
+### Key Visuals
+
+- Country Treemap
+- Top 10 Revenue Items
+- Segmentation Region Matrix
+- Revenue Share Trend
+
+### Business Questions Answered
+
+- Which countries contribute the most revenue?
+- Which items drive forecast volume?
+- How is revenue distributed across segmentation regions?
+
+---
+
+## Screenshot
+
+![Segmentation Analysis](ScreenShots/Segmentation%20View.png)
+
+---
+
+# 4. Accuracy Trend
+
+### Purpose
+
+Monitor forecasting quality over time.
+
+### Key Visuals
+
+- Forecast Accuracy Trend
+- Forecast Volatility Trend
+- Forecast Direction Analysis
+- Country Accuracy Comparison
+
+### Business Questions Answered
+
+- Is forecast quality improving?
+- Which periods are unstable?
+- Which countries have poor forecast accuracy?
+- How volatile is the forecast process?
+
+---
+
+## Screenshot
+
+![Accuracy Trend](ScreenShots/Accuracy%20Trend.png)
+
+---
+
+# 5. Item Level Analysis
+
+### Purpose
+
+Perform SKU-level forecast analysis.
+
+### Key Visuals
+
+- Item Performance Matrix
+- Revenue Variance Analysis
+- FG vs Set Revenue Split
+
+### Business Questions Answered
+
+- Which items drive forecast error?
+- Which products create revenue variance?
+- What is the FG vs Set revenue mix?
+
+---
+
+## Screenshot
+
+![Item Analysis](ScreenShots/Item%20Level%20Analysis.png)
+
+---
+
+# 6. Forecast Insights & Risk Analysis
+
+### Purpose
+
+Identify forecasting risks and bias drivers.
+
+### Key Visuals
+
+- Products Causing Forecast Bias
+- Non-Revenue Forecast Trend
+- Forecast Decomposition Waterfall
+
+### Business Questions Answered
+
+- Which products cause forecast bias?
+- Which periods create forecasting risk?
+- How does revenue decompose over time?
+- Where should planners focus attention?
+
+---
+
+## Screenshot
+
+![Forecast Insights](ScreenShots/Forecast%20Insights%20%26%20Risk%20Analysis.png)
+
+---
+
+# Python Exploratory Data Analysis
+
+A complete EDA notebook was developed using Python.
+
+File:
+
+```text
+SIOP_EDA_Virat_Dwivedi.ipynb
+```
+
+### EDA Coverage
+
+- Dataset Understanding
+- Data Quality Assessment
+- Missing Value Analysis
+- Forecast Distribution Analysis
+- Revenue Distribution Analysis
+- Country-Level Analysis
+- Period Trend Analysis
+- Forecast Revision Analysis
+- Forecast Accuracy Analysis
+- Segmentation Analysis
+- Item-Level Analysis
+- Forecast Volatility Analysis
+- Revenue Heatmaps
+- Business Insight Generation
+
+---
+
+# Key Business Insights
+
+### Forecast Accuracy
+
+- Lag 0 forecasts consistently outperform Lag 1 forecasts.
+- Forecast refinement closer to execution improves prediction quality.
+
+### Forecast Bias
+
+- Certain countries exhibit persistent over-forecasting.
+- Others show chronic under-forecasting behavior.
+
+### Revenue Gap
+
+- Significant difference exists between forecasted and actual revenue.
+- Revenue variance highlights planning inefficiencies.
+
+### Forecast Volatility
+
+- Several periods experience large forecast revisions.
+- High volatility indicates lower planning confidence.
+
+### Item-Level Findings
+
+- A small number of products contribute disproportionately to forecast errors.
+- Targeted planner intervention can improve overall forecast quality.
+
+---
+
+# Repository Structure
+
+```text
+.
 │
-├── SIOP_EDA_Virat_Dwivedi.ipynb     # Full EDA notebook (14 analyses)
-├── SIOP_Report_Virat_Dwivedi.docx   # Submission report (8 sections)
-├── README.md                        # This file
+├── ScreenShots/
 │
-├── dashboard/
-│   ├── SIOP_Dashboard.pbix          # Power BI file (6 pages)
-│   └── screenshots/
-│       ├── Executive_Summary.png
-│       ├── Executive_Overview1.png
-│       ├── Forecast_vs_Actual2.png
-│       ├── Segmentation_View.png
-│       ├── Accuracy_Trend.png
-│       ├── Item_Level_Analysis.png
-│       ├── Forecast_Insights___Risk_Analysis.png
-│       └── Model_View.png
+├── Case Study 2 SIOP Reporting.xlsb
 │
-└── data/
-    └── Case_Study_2_SIOP_Reporting.xlsb   # Source data (not included — confidential)
+├── README.md
+│
+├── SIOP Report.pdf
+│
+├── SIOP-Dashboards.pbix
+│
+└── SIOP_EDA_Virat_Dwivedi.ipynb
 ```
 
 ---
 
-##  Business Requirements Addressed
+# Files Included
 
-| # | Requirement | Status |
-|---|---|---|
-| 1 | Forecast Accuracy % = 1 − \|Lag Qty − Actual Qty\| / Actual Qty | ✅ Implemented in DAX (Lag 0 & Lag 1) |
-| 2 | Forecast Bias % = (Lag Qty − Actual Qty) / Actual Qty | ✅ Implemented in DAX (Lag 0 & Lag 1) |
-| 3 | Executive charts for Revenue, Non-Revenue & CAPEX by Country | ✅ Executive Overview page |
-| 4 | Lag Selection filter: Resultant / Lag 0 / Lag 1 | ✅ Dynamic SWITCH() measure + SlicerLag table |
-| 5 | Wide-format data transformation (Resultant, Lag 0, Lag 1 columns) | ✅ Power Query 4-stage pipeline |
-| 6 | Merge forecast with actuals on Item + Country + Period | ✅ Left join in Power Query |
-| 7 | Report submission documenting approach and findings | ✅ 8-section Word report |
+| File | Description |
+|--------|--------|
+| SIOP-Dashboards.pbix | Power BI Dashboard |
+| SIOP_EDA_Virat_Dwivedi.ipynb | Python EDA Notebook |
+| SIOP Report.pdf | Project Report |
+| README.md | Project Documentation |
+| ScreenShots | Dashboard Screenshots |
 
 ---
 
-##  Data Model
+# Skills Demonstrated
 
-The solution uses a **star schema** in Power BI:
-
-```
-DimPeriod ──────┐
-                ├──── ForecastWide (Fact) ────── DimCountry
-Actual ─────────┘
-                        │
-                   SlicerLag (Disconnected — drives SWITCH measures)
-```
-
-**ForecastWide** is the central fact table produced by the Power Query transformation. It contains one row per Item–Country–Period with 9 lag columns (Resultant/Lag0/Lag1 × Revenue/NonRevenue/CAPEX) plus merged Actual columns.
-
----
-
-##  Data Transformation Pipeline (Power Query)
-
-| Stage | Step | What It Does |
-|---|---|---|
-| 1 | Rename & Cast | Fixes `CAPEX Foreacast` typo; casts `Item` to Text in both tables |
-| 2 | Snapshot Labelling | Maps `AsOfPeriod` → `SnapshotLabel` (2023 P12 = Resultant, P11 = Lag 0, P10 = Lag 1) |
-| 3 | Pivot to Wide Format | Unpivot → add `PivotKey` (SnapshotLabel + "_" + Column) → Pivot to produce 9 lag columns |
-| 4 | Merge with Actuals | Left join ForecastWide ← Actual on `Item + Country + Period`; expand actuals |
+- Business Intelligence
+- Power BI Dashboard Development
+- Power Query ETL
+- DAX Measure Development
+- Data Modeling
+- Forecast Analysis
+- Forecast Accuracy Measurement
+- Forecast Bias Analysis
+- Exploratory Data Analysis
+- Data Storytelling
+- Executive Dashboard Design
 
 ---
 
-##  DAX Measure Catalogue
+# Author
 
-### Block 1 — Forecast Aggregation (9 measures)
-```dax
-Resultant Revenue Forecast = SUM(ForecastWide[Resultant Revenue Forecast])
-Lag0 Revenue Forecast      = SUM(ForecastWide[Lag0 Revenue Forecast])
-Lag1 Revenue Forecast      = SUM(ForecastWide[Lag1 Revenue Forecast])
--- (same pattern for NonRevenue and CAPEX)
-```
+**Virat Dwivedi**
 
-### Block 2 — Actuals (3 measures)
-```dax
-Actual Revenue Qty    = SUM(ForecastWide[Actual Revenue Qty])
-Actual NonRevenue Qty = SUM(ForecastWide[Actuals NonRevenue Qty])
-Actual Capex Qty      = SUM(ForecastWide[Actuals Capex Qty])
-```
+B.Tech CSE (Business Analytics)  
+VIT Chennai
 
-### Block 3 — KPI Measures (4 measures)
-```dax
-Forecast Accuracy % (Lag0 Revenue) =
-    VAR LagQty = [Lag0 Revenue Forecast]
-    VAR ActQty = [Actual Revenue Qty]
-    RETURN IF(ActQty = 0, BLANK(), 1 - ABS(LagQty - ActQty) / ActQty)
+GitHub: https://github.com/Viratdwvd
 
-Forecast Bias % (Lag0 Revenue) =
-    VAR LagQty = [Lag0 Revenue Forecast]
-    VAR ActQty = [Actual Revenue Qty]
-    RETURN IF(ActQty = 0, BLANK(), DIVIDE(LagQty - ActQty, ActQty))
-```
-
-### Block 4 — Dynamic Lag Switch (3 measures)
-```dax
-Selected Revenue Forecast =
-    SWITCH([Selected Lag Label],
-        "Resultant", [Resultant Revenue Forecast],
-        "Lag 0",     [Lag0 Revenue Forecast],
-        "Lag 1",     [Lag1 Revenue Forecast],
-        [Resultant Revenue Forecast]
-    )
-```
-
-### Block 5 — Variance (2 measures)
-```dax
-Revenue Variance   = [Resultant Revenue Forecast] - [Actual Revenue Qty]
-Revenue Variance % = DIVIDE([Revenue Variance], [Actual Revenue Qty])
-```
+LinkedIn: https://linkedin.com/in/viratdwivedi
 
 ---
 
-##  Dashboard Pages
-
-| Page | Purpose | Key Visuals |
-|---|---|---|
-| **Landing** | Navigation hub + headline KPIs | 4 KPI cards, 6 bookmark buttons |
-| **Executive Overview** | Lag comparison + revision tracking | Lag-switched line chart, CAPEX/Non-Rev cards, Revision waterfall |
-| **Forecast vs Actual** | Country & period accuracy deep-dive | Matrix table (conditional formatting), period line chart, Revenue Gap waterfall |
-| **Segmentation Analysis** | Volume distribution by geography | Country treemap, Top 10 Items bar, Segmentation matrix, area chart |
-| **Accuracy Trend** | Period-by-period accuracy monitoring | Dual-line accuracy chart, Volatility bars, Forecast Direction table |
-| **Item Analysis** | SKU-level drill-down | Item table with variance, Set vs FG donut charts |
-| **Forecast Insights & Risk** | Bias outlier identification | Bias league table, Non-Rev trend, Decomposition waterfall |
-
----
-
-## Key Findings (EDA)
-
-### Headline KPIs
-
-| Metric | Value | Benchmark |
-|---|---|---|
-| Actual Revenue Qty | 34.44 M | — |
-| Resultant Revenue Forecast | 16.05 M | — |
-| Total Revenue Gap | 18.39 M | — |
-| Forecast Accuracy (Lag 0) | 57.0% | ≥ 80% |
-| Forecast Accuracy (Lag 1) | 40.9% | ≥ 80% |
-| Forecast Bias (Lag 0) | −43% | 0% |
-| Forecast Attainment | 0.47 | 1.0 |
-
-### Country-Level Accuracy
-
-| Country | Accuracy Lag 0 | Bias Lag 0 | Diagnosis |
-|---|---|---|---|
-| A | 33.0% | −67.0% | Chronically under-forecasted |
-| B | −220.3% | +320.3% | Severe over-forecast |
-| C | 63.2% | +36.8% | Closest to target |
-| D | −1,186.3% | +1,286.3% | Critical outlier |
-
-### EDA Coverage (14 analyses in notebook)
-1. Dataset schema & column classification
-2. Null value analysis & data quality
-3. Forecast measure distributions (log-scale histograms)
-4. Country-wise revenue forecast analysis
-5. Snapshot (Lag) comparison
-6. Temporal trend analysis by period
-7. Forecast vs Actual overlay
-8. Segmentation analysis
-9. Set vs FG analysis
-10. Period Offset (forecast horizon) analysis
-11. Top Items Pareto curve
-12. Country × Period revenue heatmap
-13. Forecast revision analysis (Lag delta)
-14. Forecast accuracy heatmap by Country & Period
-
----
-
-##  Tech Stack
-
-| Layer | Tools |
-|---|---|
-| Data Source | Excel .xlsb (pyxlsb engine) |
-| EDA | Python — pandas, numpy, matplotlib, seaborn |
-| Transformation | Power Query (M language) |
-| Data Model | Power BI star schema |
-| KPI Engineering | DAX (SWITCH, DIVIDE, VAR/RETURN pattern) |
-| Dashboard | Microsoft Power BI Desktop |
-| Report | Microsoft Word (.docx) |
-
----
-
-## Data Quality Notes
-
-- **Lifecycle column** — 94.7% null. Excluded from all analyses.
-- **Actuals CAPEX Qty** — All values zero. CAPEX accuracy analysis not feasible.
-- **Item column** — Mixed types (integer + string like `I0138.0926`). Cast to Text before join.
-- **Segmentation columns** — 97–99.9% populated. Fully reliable for slicing.
-- **Revenue Forecast & Actual Revenue** — Zero nulls. Primary measure is clean.
-
----
-
-## Contact
-
-**Virat Dwivedi**  
-📧 vrtdwvd@gmail.com  
-🔗 [LinkedIn](https://linkedin.com/in/viratdwivedi)  
-💻 [GitHub](https://github.com/Viratdwvd)  
-
----
-
-*VIT Chennai · B.Tech CSE — Business Analytics · Case Study 2 — SIOP Reporting*
+**Power BI • DAX • Power Query • Python • Business Analytics**
